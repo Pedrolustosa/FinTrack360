@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FinTrack360.Application\FinTrack360.Application.csproj" />
+    <ProjectReference Include="..\FinTrack360.Infrastructure\FinTrack360.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
