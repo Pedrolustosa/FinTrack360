@@ -15,4 +15,8 @@
     <ProjectReference Include="..\FinTrack360.Infrastructure.IoC\FinTrack360.Infrastructure.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
