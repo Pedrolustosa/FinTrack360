@@ -1,8 +1,6 @@
 using FinTrack360.API.Extensions;
 using FinTrack360.API.Middleware;
 using FinTrack360.Infrastructure.IoC;
-using FinTrack360.Application.Common.Interfaces;
-using FinTrack360.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +11,6 @@ builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerConfig();
-builder.Services.AddScoped<ITokenRevocationService, TokenRevocationService>();
 
 var app = builder.Build();
 

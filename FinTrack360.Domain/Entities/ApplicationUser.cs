@@ -6,4 +6,5 @@ public class ApplicationUser : IdentityUser<string>
     public string LastName { get; set; } = string.Empty;
     public bool IsDeleted { get; set; } = false;
     public DateTime? DeletedAt { get; set; }
+    public ICollection<Account> Accounts { get; set; } = new List<Account>();
 }

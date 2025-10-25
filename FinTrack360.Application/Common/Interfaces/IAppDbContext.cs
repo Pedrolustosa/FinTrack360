@@ -7,6 +7,7 @@ public interface IAppDbContext
 {
     DbSet<ApplicationUser> Users { get; }
     DbSet<ActivityLog> ActivityLogs { get; }
+    DbSet<Account> Accounts { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
