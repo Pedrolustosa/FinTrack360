@@ -34,6 +34,8 @@ namespace FinTrack360.Infrastructure.IoC
                 options.UseSqlite(configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
+            services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+
             services.AddIdentity<ApplicationUser, IdentityRole<string>>(options =>
             {
                 options.Password.RequireDigit = true;

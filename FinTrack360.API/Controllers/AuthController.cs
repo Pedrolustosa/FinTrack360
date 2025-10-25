@@ -7,6 +7,7 @@ using FinTrack360.Application.Features.Auth.ConfirmEmail;
 using FinTrack360.Application.Features.Auth.ResetPassword;
 using FinTrack360.Application.Features.Auth.ForgotPassword;
 using FinTrack360.Application.Features.Auth.RetryConfirmationEmail;
+using System.Security.Claims;
 using FinTrack360.Application.Features.Auth.ChangePassword;
 using FinTrack360.Application.Features.Auth.Logout;
 using FinTrack360.Application.Common.Interfaces;
@@ -87,8 +88,10 @@ public class AuthController(ISender mediator, IConfiguration configuration, IEma
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var command = new ChangePasswordCommand(dto.OldPassword, dto.NewPassword, dto.ConfirmPassword, userId);
         await _mediator.Send(command);
         return Ok(new { Message = "Password changed successfully." });
     }
