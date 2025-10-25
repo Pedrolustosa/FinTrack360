@@ -1,21 +1,34 @@
+using FinTrack360.API.Extensions;
+using FinTrack360.API.Middleware;
+using FinTrack360.Infrastructure.IoC;
+using FinTrack360.Application.Common.Interfaces;
+using FinTrack360.Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddMemoryCache();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerConfig();
+builder.Services.AddScoped<ITokenRevocationService, TokenRevocationService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseGlobalExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseMiddleware<TokenRevocationMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
