@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FinTrack360.Application.Features.Profile.UpdateProfile;
 using FinTrack360.Application.Features.Profile.DeleteAccount;
+using FinTrack360.Application.Features.Profile.GetActivityLog;
 
 namespace FinTrack360.API.Controllers;
 
@@ -29,5 +30,13 @@ public class ProfileController(ISender mediator) : ControllerBase
     {
         await _mediator.Send(command);
         return Ok(new { Message = "Account deleted successfully." });
+    }
+
+    [HttpGet("activity-log")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetActivityLog()
+    {
+        var logs = await _mediator.Send(new GetActivityLogQuery());
+        return Ok(logs);
     }
 }
