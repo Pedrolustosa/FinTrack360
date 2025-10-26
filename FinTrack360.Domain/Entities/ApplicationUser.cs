@@ -8,4 +8,5 @@ public class ApplicationUser : IdentityUser<string>
     public DateTime? DeletedAt { get; set; }
     public ICollection<Account> Accounts { get; set; } = new List<Account>();
     public ICollection<Budget> Budgets { get; set; } = new List<Budget>();
+    public ICollection<RecurringTransaction> RecurringTransactions { get; set; } = new List<RecurringTransaction>();
 }

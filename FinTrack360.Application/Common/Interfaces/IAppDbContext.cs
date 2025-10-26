@@ -12,6 +12,7 @@ public interface IAppDbContext
     DbSet<Category> Categories { get; }
     DbSet<Budget> Budgets { get; }
     DbSet<Asset> Assets { get; }
+    DbSet<RecurringTransaction> RecurringTransactions { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
