@@ -1,6 +1,9 @@
 using FinTrack360.API.Extensions;
 using FinTrack360.API.Middleware;
 using FinTrack360.Infrastructure.IoC;
+using Hangfire;
+using Hangfire.Storage.SQLite;
+using FinTrack360.Application.Common.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,15 @@ builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerConfig();
+
+// Hangfire Configuration
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSQLiteStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -29,5 +41,12 @@ app.UseMiddleware<TokenRevocationMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Hangfire Dashboard and Job Scheduling
+app.UseHangfireDashboard();
+RecurringJob.AddOrUpdate<IRecurringTransactionService>(
+    "process-recurring-transactions",
+    service => service.ProcessRecurringTransactionsAsync(),
+    Cron.Daily); // Runs every day at midnight
 
 app.Run();
