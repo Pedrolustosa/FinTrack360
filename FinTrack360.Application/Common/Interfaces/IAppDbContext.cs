@@ -8,6 +8,8 @@ public interface IAppDbContext
     DbSet<ApplicationUser> Users { get; }
     DbSet<ActivityLog> ActivityLogs { get; }
     DbSet<Account> Accounts { get; }
+    DbSet<Transaction> Transactions { get; }
+    DbSet<Category> Categories { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
