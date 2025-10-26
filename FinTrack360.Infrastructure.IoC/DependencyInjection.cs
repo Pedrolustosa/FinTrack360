@@ -92,6 +92,7 @@ namespace FinTrack360.Infrastructure.IoC
             services.AddTransient<IEmailService, EmailService>();
             services.AddScoped<ITokenRevocationService, TokenRevocationService>();
             services.AddTransient<IRecurringTransactionService, RecurringTransactionService>();
+            services.AddTransient<ITransactionParser, CsvTransactionParser>();
             return services;
         }
     }

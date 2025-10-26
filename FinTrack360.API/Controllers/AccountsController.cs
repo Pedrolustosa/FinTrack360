@@ -6,6 +6,7 @@ using FinTrack360.Application.Features.Accounts.GetAccountById;
 using FinTrack360.Application.Features.Accounts.GetAccounts;
 using FinTrack360.Application.Features.Accounts.UpdateAccount;
 using FinTrack360.Application.Features.Accounts.DeleteAccount;
+using FinTrack360.Application.Features.Transactions.ImportTransactions;
 
 namespace FinTrack360.API.Controllers;
 
@@ -62,5 +63,15 @@ public class AccountsController(ISender mediator) : ControllerBase
     {
         await _mediator.Send(new DeleteAccountCommand(id));
         return NoContent();
+    }
+
+    [HttpPost("{accountId:guid}/import")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ImportTransactions(Guid accountId, IFormFile file)
+    {
+        var command = new ImportTransactionsCommand(accountId, file);
+        await _mediator.Send(command);
+        return Ok(new { Message = "Transactions imported successfully." });
     }
 }
