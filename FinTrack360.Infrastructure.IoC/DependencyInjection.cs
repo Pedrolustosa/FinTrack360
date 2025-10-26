@@ -35,6 +35,7 @@ namespace FinTrack360.Infrastructure.IoC
                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
             services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddIdentity<ApplicationUser, IdentityRole<string>>(options =>
             {

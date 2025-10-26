@@ -13,6 +13,7 @@ public interface IAppDbContext
     DbSet<Budget> Budgets { get; }
     DbSet<Asset> Assets { get; }
     DbSet<RecurringTransaction> RecurringTransactions { get; }
+    DbSet<FinancialGoal> FinancialGoals { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
