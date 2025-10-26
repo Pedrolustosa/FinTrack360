@@ -12,4 +12,5 @@ public class Account
     public string InstitutionName { get; set; } = string.Empty;
     public decimal CurrentBalance { get; set; }
     public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+    public ICollection<Asset> Assets { get; set; } = new List<Asset>();
 }
