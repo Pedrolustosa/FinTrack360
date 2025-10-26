@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public required DbSet<Account> Accounts { get; set; }
     public required DbSet<Transaction> Transactions { get; set; }
     public required DbSet<Category> Categories { get; set; }
+    public required DbSet<Budget> Budgets { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
