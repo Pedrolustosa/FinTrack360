@@ -11,6 +11,7 @@ public interface IAppDbContext
     DbSet<Transaction> Transactions { get; }
     DbSet<Category> Categories { get; }
     DbSet<Budget> Budgets { get; }
+    DbSet<Asset> Assets { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
