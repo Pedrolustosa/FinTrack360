@@ -18,6 +18,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public required DbSet<RecurringTransaction> RecurringTransactions { get; set; }
     public required DbSet<FinancialGoal> FinancialGoals { get; set; }
     public required DbSet<Debt> Debts { get; set; }
+    public required DbSet<CategorizationRule> CategorizationRules { get; set; }
+    public required DbSet<Notification> Notifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

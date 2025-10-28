@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FinTrack360.Application.Features.Transactions.ImportTransactions;
 
-public class ImportTransactionsCommandHandler(IAppDbContext dbContext, ITransactionParser transactionParser, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+public class ImportTransactionsCommandHandler(IAppDbContext dbContext, ITransactionParser transactionParser, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IRuleEngineService ruleEngineService)
     : IRequestHandler<ImportTransactionsCommand, Unit>
 {
     public async Task<Unit> Handle(ImportTransactionsCommand request, CancellationToken cancellationToken)
@@ -22,25 +22,25 @@ public class ImportTransactionsCommandHandler(IAppDbContext dbContext, ITransact
         await using var stream = request.File.OpenReadStream();
         var parsedTransactions = await transactionParser.ParseAsync(stream);
 
+        var transactions = parsedTransactions.Select(parsedTx => new Transaction
+        {
+            AccountId = account.Id,
+            Amount = parsedTx.Amount,
+            Date = parsedTx.Date,
+            Description = parsedTx.Description,
+            Type = parsedTx.Amount > 0 ? TransactionType.Income : TransactionType.Expense,
+        }).ToList();
+
+        // Apply categorization rules
+        var categorizedTransactions = await ruleEngineService.ApplyCategorizationRulesAsync(userId, transactions);
+
         await unitOfWork.BeginTransactionAsync(cancellationToken);
         try
         {
-            foreach (var parsedTx in parsedTransactions)
-            {
-                var transaction = new Transaction
-                {
-                    AccountId = account.Id,
-                    Amount = parsedTx.Amount,
-                    Date = parsedTx.Date,
-                    Description = parsedTx.Description,
-                    Type = parsedTx.Amount > 0 ? TransactionType.Income : TransactionType.Expense,
-                    // CategoryId would be null here. Phase 2 will address this.
-                };
-                dbContext.Transactions.Add(transaction);
-            }
+            dbContext.Transactions.AddRange(categorizedTransactions);
 
             // Update account balance
-            var totalImported = parsedTransactions.Sum(t => t.Amount);
+            var totalImported = categorizedTransactions.Sum(t => t.Amount);
             account.CurrentBalance += totalImported;
 
             await unitOfWork.CommitTransactionAsync(cancellationToken);
