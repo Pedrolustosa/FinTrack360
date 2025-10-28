@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FinTrack360.Application.Common.Behaviors;
+using FinTrack360.Application.Common.Interfaces;
+using FinTrack360.Application.Services;
 
 namespace FinTrack360.Application;
 public static class DependencyInjection
@@ -17,6 +19,8 @@ public static class DependencyInjection
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ActivityLoggingBehavior<,>));
         });
+
+        services.AddScoped<IRuleEngineService, RuleEngineService>();
         return services;
     }
 }
