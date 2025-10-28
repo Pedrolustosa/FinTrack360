@@ -7,6 +7,8 @@ using FinTrack360.Application.Features.Dashboard.KPIs.MonthlyCashFlow;
 using FinTrack360.Application.Features.Dashboard.BudgetSummary;
 using FinTrack360.Application.Features.Dashboard.SpendingByCategoryChart;
 using FinTrack360.Application.Features.Dashboard.UpcomingBills;
+using FinTrack360.Application.Features.Dashboard.AccountSummary;
+using FinTrack360.Application.Features.Dashboard.RecentTransactions;
 
 namespace FinTrack360.API.Controllers;
 
@@ -67,6 +69,26 @@ public class DashboardController(ISender mediator) : ControllerBase
     public async Task<IActionResult> GetUpcomingBills()
     {
         var query = new GetUpcomingBillsQuery(GetUserIdOrThrow());
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("account-summary")]
+    [ProducesResponseType(typeof(List<AccountSummaryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetAccountSummary()
+    {
+        var query = new GetAccountSummaryQuery(GetUserIdOrThrow());
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("recent-transactions")]
+    [ProducesResponseType(typeof(List<RecentTransactionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetRecentTransactions()
+    {
+        var query = new GetRecentTransactionsQuery(GetUserIdOrThrow());
         var result = await mediator.Send(query);
         return Ok(result);
     }
