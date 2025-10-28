@@ -24,9 +24,17 @@ public class GetNetWorthQueryHandler(IAppDbContext context) : IRequestHandler<Ge
         decimal totalInvestmentsValue = userAssets
             .Sum(a => a.Quantity * a.AverageCost);
 
-        decimal totalLiabilities = userAccounts
+        var userDebts = await context.Debts
+            .Where(d => d.UserId == request.UserId)
+            .ToListAsync(cancellationToken);
+
+        decimal totalCreditCardLiabilities = userAccounts
             .Where(a => a.Type == AccountType.CreditCard)
             .Sum(a => a.CurrentBalance);
+
+        decimal totalLongTermDebts = userDebts.Sum(d => d.CurrentBalance);
+
+        decimal totalLiabilities = totalCreditCardLiabilities + totalLongTermDebts;
 
         decimal totalAssets = totalPositiveAccounts + totalInvestmentsValue;
 

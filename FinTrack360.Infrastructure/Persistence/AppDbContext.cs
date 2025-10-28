@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public required DbSet<Asset> Assets { get; set; }
     public required DbSet<RecurringTransaction> RecurringTransactions { get; set; }
     public required DbSet<FinancialGoal> FinancialGoals { get; set; }
+    public required DbSet<Debt> Debts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
