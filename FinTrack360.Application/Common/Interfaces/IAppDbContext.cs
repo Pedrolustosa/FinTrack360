@@ -14,6 +14,7 @@ public interface IAppDbContext
     DbSet<Asset> Assets { get; }
     DbSet<RecurringTransaction> RecurringTransactions { get; }
     DbSet<FinancialGoal> FinancialGoals { get; }
+    DbSet<Debt> Debts { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
