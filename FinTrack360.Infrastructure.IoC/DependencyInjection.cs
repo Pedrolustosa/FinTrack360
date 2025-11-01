@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Hangfire;
+using Hangfire.SQLite;
 
 namespace FinTrack360.Infrastructure.IoC;
 
@@ -106,7 +107,7 @@ public static class DependencyInjection
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
             .UseSimpleAssemblyNameTypeSerializer()
             .UseRecommendedSerializerSettings()
-            .UseSqliteStorage(configuration.GetConnectionString("DefaultConnection")));
+            .UseSQLiteStorage(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddHangfireServer(options => options.WorkerCount = 1);
 
